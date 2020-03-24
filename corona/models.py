@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 class Language(models.Model):
     language = models.CharField(max_length=100)
@@ -38,17 +39,18 @@ class Volunteer(models.Model):
 
 class Message(models.Model):
     language = models.CharField(max_length=50)
+    created = models.DateTimeField(auto_now_add=True)
     main_message = models.TextField(max_length=500)
 
     def __str__(self):
-        return self.language
+        return self.language 
+
 
 class VernacularMessage(models.Model):
     language = models.ForeignKey(Language, on_delete=models.PROTECT, related_name="vernacularlanguages")
     main_message = models.ForeignKey(Message, on_delete=models.PROTECT, related_name="vernacularmessages")
     message = models.TextField(max_length=500)
     sent = models.BooleanField(default=False)
-
 
     def __str__(self):
         return str(self.language)

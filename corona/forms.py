@@ -56,7 +56,7 @@ class VernacularMessageForm(forms.ModelForm):
         fields = ['language', 'message']
         widgets = {
             'language': forms.TextInput(attrs={'placeholder': 'Langauge'}),
-            'message': forms.TextInput(attrs={'placeholder': 'Vernacular Message ...'}),
+            'message': forms.TextInput(attrs={'placeholder': 'Your translation ...'}),
         }
         labels = {
             'language': '', 'message': ''
