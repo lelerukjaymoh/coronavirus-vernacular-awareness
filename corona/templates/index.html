@@ -1,0 +1,439 @@
+{% load static %}
+{% include 'shared/base.html' %}
+{% load bootstrap4 %}
+
+{% block body %}
+{% if messages %}
+<div class="container">
+<div class="alert alert-info alert-dismissible fade show" role="alert">
+    {% for message in messages %}
+    <p>{{ message }}</p>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    {% endfor %}
+</div>
+</div>
+{% endif %}
+
+<!-- Navbar section -->
+<section>
+    <nav class="navbar navbar-expand-lg navbar-light bg-warning">
+        <a class="navbar-brand font-weight-bold" href="">Covid-19 Awareness</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
+            aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                <li class="nav-item mr-4">
+                    <a class="nav-link text-muted active" href="#volunteer">Donate / Volunteer</a>
+                </li>
+                <li class="nav-item mr-4">
+                    <a class="nav-link text-muted" href="#faqs">FAQs</a>
+                </li>
+                <li class="nav-item mr-4">
+                    <a class="nav-link text-muted" href="#help">Support</a>
+                </li>
+                <li class="nav-item mr-4">
+                    <a class="nav-link text-muted" href="#featured">Featured Supporters</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</section>
+
+<!-- Notify section -->
+<section class="notify ml-auto mr-auto row bg-warning">
+    <div class="container col-lg-8 text-center my-auto">
+        <h3 class="pb-5">Help spread Covid-19 Awareness</h3>
+        <form method="POST" id="notify_form" class="form-inline ml-auto text-center">
+            {% csrf_token %}
+            {% bootstrap_form RecipientForm %}
+            <div class="dropdown">
+                <input class="btn btn-light text-muted font-weight-bold language_selected dropdown-toggle" type="text"
+                    name="language" id="language_input" readonly data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false" value="Language">
+                <div class="dropdown-menu" aria-labelledby="language_input">
+                    {% for language in languages %}
+                    <a class="dropdown-item" href="#">{{language}}</a>
+                    {% endfor %}
+                </div>
+            </div>
+            <input class="btn btn-outline-light form-inline font-weight-bold px-5" id="notify_button" type="submit" value="Notify">
+        </form>
+        <p class="text-muted mt-5">Currently we have only have <b>{{languages_count}}</b> vernacular languages 
+            available, if you wish to add more language you can fill 
+            the <a href="#volunteer" class="font-weight-bold text-primary">volunteer</a> form below to 
+            help us translate awareness information to more languages</p>
+    </div>
+</section>
+
+<section class="my-5 infographics">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="mb-3 card">
+                    <div class="row card-body pb-0">
+                        <div class="col-8">
+                            <h6 class="font-weight-bold">Subscribers</h6>
+                            <p class="text-muted">Current subscribers </p>
+                        </div>
+                        <div class="col-4 ">
+                            <h4 class="font-weight-bold text-success statistics">{% if subscribers %}{{subscribers}}{%else%}0{% endif %}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="mb-3 card">
+                    <div class="row card-body pb-0">
+                        <div class="col-8">
+                            <h6 class="font-weight-bold">Notifications</h6>
+                            <p class="text-muted">SMS sent</p>
+                        </div>
+                        <div class="col-4">
+                            <h4 class="font-weight-bold text-danger statistics">{% if sent_messages %}{{sent_messages}}{%else%}0{% endif %}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="mb-3 card">
+                    <div class="row card-body pb-0">
+                        <div class="col-8">
+                            <h6 class="font-weight-bold">Donations</h6>
+                            <p class="text-muted">SMS Donated</p>
+                        </div>
+                        <div class="col-4 ">
+                            <h4 class="font-weight-bold text-primary statistics">{% if donations %}{{donations}}{%else%}0{% endif %}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="mb-3 card">
+                    <div class="row card-body pb-0">
+                        <div class="col-8">
+                            <h6 class="font-weight-bold">Volunteers</h6>
+                            <p class="text-muted">Contributors to the intiative</p>
+                        </div>
+                        <div class="col-4 ">
+                            <h4 class="font-weight-bold text-warning statistics">{% if volunteers %}{{volunteers}}{%else%}0{% endif %}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="my-5 row">
+            <div class="mx-3 container">
+                <p class="main-content">This initiative fully runs on the good will of anybody willing to participate.
+                    We mainly
+                    depend on well wishers to <a href="#donor"
+                        class="badge font-weight-bold badge-pill py-2 px-3 badge-success">donate</a>
+                    money for purchasing SMS which are used to notify the recipients. We also have a team of
+                    <a href="#volunteer" class="badge font-weight-bold py-2 px-3 badge-primary">volunteers</a> who
+                    translate and verify the translated messages. If this initiative inspires you we would be glad
+                    if you joined us to ensure the Coronavirus awareness reaches more people and get featured for
+                    making it a success.
+                </p>
+                <div class="container my-4">
+                    <h4 class="text-center py-3 text-warning">Join us as a:</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div id="volunteer" class="card mt-3">
+                                <div class="card-body text-center">
+                                    <h4 class="text-muted">Volunteer</h4>
+                                    <p>A Volunteer translates messages to his or her vernacular language. The
+                                        translated message is then checked by another volunteer for errors.
+                                        As a volunteer you can do any of the two tasks, translate a message
+                                        or verify if a message have been correctly translated
+                                    </p>
+                                    <button class="btn px-5 btn-rounded btn-outline-primary" data-toggle="modal"
+                                        data-target="#volunteerModal">Volunteer</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Volunteer Modal -->
+                        <div class="modal fade" id="volunteerModal" tabindex="-1" role="dialog"
+                            aria-labelledby="volunteerModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-body text-center">
+                                        <h4 class="my-4">Join as a volunteer</h4>
+                                        <form action="" method="POST">
+                                            {% csrf_token %}
+                                            {% bootstrap_form VolunteerForm %}
+                                            <div class="mt-5">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Volunteer</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div id="donor" class="card mt-3">
+                            <div class="card-body text-center">
+                                <h4 class="text-muted">Donor</h4>
+                                <p>As a Donor you can donate any amount of money to help purchase messages
+                                    which are then sent to recipients. The cost of 1 message is approxiately
+                                    Ksh 1. Since the messages sent are normally long, one notification could bear
+                                    two messages that's approximately Ksh 2 per notification. This means by
+                                    donating as low as Ksh 10 this could help notify 5 people of how to protect
+                                    themselves from the Coronavirus infection
+                                </p>
+                                <p class="text-primary">When you donate, you don't donate it as money rather you donate
+                                    it as SMS. You
+                                    help us by purchasing SMSs from <a class="font-weight-bold text-warning"
+                                        href="https://www.africastalking.com">
+                                        Africas Talking</a> <i class="text-muted">(A company offering bulk SMS
+                                        services)</i>
+                                </p>
+                                <button class="btn btn-rounded px-5 btn-outline-success" data-toggle="modal"
+                                    data-target="#donorModal">Donate</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Donor Modal -->
+                    <div class="modal fade" id="donorModal" tabindex="-1" role="dialog"
+                        aria-labelledby="donorModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <h4 class="my-4 text-center">Join as a donor</h4>
+                                    <p>To donate to this intiative:</p>
+                                    <ol>
+                                        <li>On the M-PESA Menu Go to Lipa Na M-PESA </li>
+                                        <li>Enter <b>525900</b> as the Businness Number </li>
+                                        <li>Enter <b>coronavirus.api</b> as the Account Number </li>
+                                        <li>Enter <b>the amount you wish to donate</b> as the amount </li>
+                                        <li>Enter your M-PESA PIN. </li>
+                                        <li>Press OK </li>
+                                        <li>You will receive a confirmation SMS from M-PESA </li>
+                                        <p class="text-center mt-4">Thanks for you donation </p>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+</section>
+
+<!-- How it works section -->
+<section class="my-5 main-content" id="faqs">
+    <div class="container">
+        <h3 class="text-warning font-weight-bold">What's all about Covid-19 Vernacular Awareness</h3>
+        <div class="container mb-5 text-muted">
+            <p>We can all agree that most of our elder relatives preffered communicate in our
+                mother tongue and they can easily relate to it. On the rise of an epidemic
+                like the Coronavirus which mainly affects the elderly, we should try as much as
+                possible to make them aware of the virus and what they can do to ensure they are safe.
+                That's why we launched this intiative to help educate our fellow citizens who have difficulty
+                understanding English to ensure the Coronavirus awareness information get to most people
+            </p>
+        </div>
+
+        <h3 class="text-warning font-weight-bold">How it works</h3>
+        <div class="container mb-5 text-muted">
+            <p>If you would like a person to get daily information on Coronavirus in their preferable
+                language, you add their number to our messaging list and select a language
+                <a class="text-warning font-weight-bold" href="#">here</a>. Every day we send out messages
+                to each registered person in the language that was selected while registering.<br> We depend on
+                volunteers who translate every new message into different vernacular languages. This messages
+                are then analysed by different volunteers to ensure they are accurate.
+            </p>
+        </div>
+
+        <h3 class="text-warning font-weight-bold">How it all started</h3>
+        <div class="container mb-5 text-muted">
+            <p>Here is a short inspiring story of how this simple initiative came to being. It all started in a
+                matatu (a minibus in Kenya), on my way home from school after schools were closed due to the
+                Coronavirus outbreak. There was this old lady by my side who couldn't understand the tout who
+                was requesting more fare from her since she couldn't understand swahili. I had to explain to
+                her that more fare was being required. Coincidentally the ministry of health message delivered
+                on my phone. If you have been receiving this Coronavirus awareness messages from the Ministry of Health
+                you can bear witness that they are always in English.
+            </p>
+            <p>
+                Then this idea came to my mind, if the lady seated next to me couldn't understand English how
+                could such awareness from the Ministry of Health or any relevant source not in a language
+                they can understand make an impactful awareness. On arriving home I started building the
+                site and the messaging system to spread awareness on Coronavirus.
+            </p>
+        </div>
+
+        <h3 class="text-warning font-weight-bold">How we ensure we only spread TRUE information</h3>
+        <div class="container mb-5 text-muted">
+            <p>We only get Coronavirus awareness information from the Ministry of Health and the World Health
+                Organisation
+            </p>
+        </div>
+
+        <h3 class="text-warning font-weight-bold">Why should I trust this?, Why should I donate or volunteer?</h3>
+        <div class="container mb-5 text-muted">
+            <p>Firstly, we don't even hold the cash you donate, cause you dont even donate cash in the first place
+                but cash in form of SMS. I started this intiative out of care and and the fact that any effort no
+                matter how small we make to fight this Coronavirus outbreak puts us in a better position than we
+                were 1 minute ago. If you have a person who you care about and he or she doesn't understand
+                English, through which most of the Coronavirus information is passed through. I believe you will
+                see the use of such an intiative. In the other hand if you don't, just imagine if you were to purchase
+                SMS worth Ksh 100 for us. This would translate to almost 50 notifications, this means your Ksh 100
+                would help us reach 50 people.
+            </p>
+        </div>
+
+        <h3 class="text-muted font-weight-bold" id="help">Requesting for more help</h3>
+        <div class="container mb-5 text-muted">
+            <p>If you believe in this intiative, I first thank you for believing in us. I would like to ask for more
+                support to make this intiative an even more success. I have currently hosted this site on my personal
+                domain. I would be grateful if you could help me raise some cash to purchase a domain and hosting
+                charges
+                for it. To make it stand on its own. I will also need to communicate to all volunteers translating the
+                messages and following up to ensure the messages are translated in time for sending them out. So I will
+                definately be spending some cash that I don't even have. If you wish to support the system please donate
+                something small.
+            </p>
+
+            <p>If you wish to support the intiative with some cash to help it stay alive for even longer. You can send
+                some cash to <b>0717771518</b>
+            </p>
+        </div>
+    </div>
+</section>
+<section class="my-5" id="featured">
+    <div class="container">
+        <h3 class="pt-3 pb-5 font-weight-bold text-muted">Who are making this intiative a success</h3>
+        <div class="owl-carousel text-center text-muted owl-theme">
+            <div class="item ml-auto text-center">
+                <img src="{% static 'images/at.png' %}" alt="">
+            </div>
+            <div class="item ml-auto text-center">
+                <p>Donate to be featured among the first contributors to this intiative</p>
+            </div>
+            <div class="item">
+                <p>Donate to be featured among the first contributors to this intiative</p>
+            </div>
+            <div class="item">
+                <p>Donate to be featured among the first contributors to this intiative</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="card-footer mt-5 pt-4 bg-warning">
+    <p class="text-center">Powered by <a class="font-weight-bold" href="https://twitter.com/Jaymohkish">lelerukjaymoh</a> and a community of
+        volunteers</p>
+
+    <div class="container">
+        <p>For any enquiries, Contact:</p>
+        <p class="font-weight-bold mb-0 text-muted">0717771518</p>
+        <a class="font-weight-bold text-primary" href="https://twitter.com/Jaymohkish">Twitter</a>
+    </div>
+</footer>
+<style>
+    .alert{
+        position: fixed;
+        top: 50px;
+        z-index: 1090;
+    }
+
+    @media only screen and (max-width: 434px) {
+        #notify_button {
+            margin-top: 15px;
+        }
+    }
+
+    .not-filled {
+        border: 2px solid red;
+    }
+
+    .btn-rounded {
+        border-radius: 20px;
+    }
+
+    .statistics {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .owl-carousel .owl-item img {
+        height: 100px;
+    }
+
+    .owl-carousel .owl-nav {
+        font-size: 30px;
+    }
+
+    .main-content {
+        font-family: Ubuntu;
+        word-spacing: .2rem;
+        line-height: 2rem;
+    }
+
+    #id_phone_number {
+        font-weight: bold;
+        color: #6c757d !important;
+    }
+
+    input {
+        margin-left: .5rem;
+    }
+
+    .notify {
+        height: 80vh;
+    }
+
+    ::selection {
+        background-color: #ffc107 !important;
+        color: white;
+    }
+</style>
+<script>
+    // Owl carousel
+    $('.owl-carousel').owlCarousel({
+        loop: true,
+        margin: 150,
+        nav: true,
+        dots: false,
+        autoplay: true,
+        animateOut: 'fadeOut',
+        animateIn: 'fadeIn',
+        responsive: {
+            0: {
+                items: 1,
+                dots: true,
+                nav: false
+            },
+            600: {
+                items: 2,
+                dots: true,
+            },
+            1000: {
+                items: 3,
+                dots: true,
+            }
+        }
+    })
+
+
+    $('.dropdown-item').on('click', function (event) {
+        var selected_language = $(event.target).text()
+        $('.language_selected').val(selected_language)
+        $('#language_input').val(selected_language)
+    });
+</script>
+{% endblock %}

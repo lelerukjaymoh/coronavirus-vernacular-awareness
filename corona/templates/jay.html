@@ -1,0 +1,221 @@
+{% load static %}
+{% include 'shared/base.html' %}
+{% load bootstrap4 %}
+
+{% block body %}
+<!-- Navbar -->
+<section>
+    <nav class="navbar navbar-expand-lg navbar-light bg-warning">
+        <a class="navbar-brand font-weight-bold" href="">Covid-19 Awareness</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
+            aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                <li class="nav-item mr-4">
+                    {% if request.user.is_authenticated %}
+                    Hello <b>{{request.user.username}}</b>
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+    </nav>
+</section>
+
+<!-- Language -->
+<section>
+    <div class="container">
+    <div class="mt-4 card">
+        <div class="card-header">
+            Language
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Language</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for language in languages %}
+                    <tr>
+                        <th scope="row">{{language.id}}</th>
+                        <td>{{language.language}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+</section>
+
+<!-- Main message -->
+<section>
+    <div class="container">
+        <div class="mt-4 card">
+            <div class="card-header">
+                Main Message
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Language</th>
+                            <th scope="col">Message</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for message in messages %}
+                        <tr>
+                            <th scope="row">{{message.id}}</th>
+                            <td>{{message.language}}</td>
+                            <td>{{message.main_message}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Recipients -->
+<section>
+    <div class="container">
+        <div class="mt-4 card">
+            <div class="card-header">
+                Recipients
+                <a href="{% url 'send_messages' %}" type="button" class="btn font-weight-bold float-right btn-outline-primary">Send Notifications</a>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Language</th>
+                            <th scope="col">Phone no</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for recipient in recipients %}
+                        <tr>
+                            <th scope="row">{{recipient.id}}</th>
+                            <td>{{recipient.language}}</td>
+                            <td>{{recipient.phone_number}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Volunteers -->
+<section>
+    <div class="container">
+        <div class="mt-4 card">
+            <div class="card-header">
+                Volunteers
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Names</th>
+                            <th scope="col">Language</th>
+                            <th scope="col">Phone no</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for volunteer in volunteers %}
+                        <tr>
+                            <th scope="row">{{volunteer.id}}</th>
+                            <td>{{volunteer.names}}</td>
+                            <td>{{volunteer.language}}</td>
+                            <td>{{volunteer.phone}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Donations -->
+<section>
+    <div class="container">
+        <div class="mt-4 card">
+            <div class="card-header">
+                Donations
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Donor</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Phone no</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for donation in donations %}
+                        <tr>
+                            <th scope="row">{{donation.id}}</th>
+                            <td>{{donation.donor}}</td>
+                            <td>{{donation.amount}}</td>
+                            <td>{{donation.phone_number}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Vernacular message -->
+<section>
+    <div class="container">
+        <div class="mt-4 card">
+            <div class="card-header">
+                Vernacular Message
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Language</th>
+                            <th scope="col">Main Message</th>
+                            <th scope="col">Vernacular Message</th>
+                            <th scope="col">Sent</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for message in vernacular_messages %}
+                        <tr>
+                            <th scope="row">{{message.id}}</th>
+                            <td>{{message.language}}</td>
+                            <td>{{message.message.main_message}}</td>
+                            <td>{{message.message}}</td>
+                            <td>{{message.sent}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}
