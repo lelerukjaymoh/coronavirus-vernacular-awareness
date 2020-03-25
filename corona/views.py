@@ -186,13 +186,13 @@ def validate(request):
             message = request.POST.get('message')
             correct = request.POST.get('correct')
 
-            message = VernacularMessage.objects.get(id=message)
-            if message.correct == False:
+            messagess = VernacularMessage.objects.get(id=int(message))
+            if messagess.correct == False:
                 messages.add_message(request, messages.SUCCESS, 'This message had already been marked as wrong If you have a better translation in that language submit it at the translate page')
                 return redirect('validate')
 
             else:
-                VernacularMessage.objects.filter(id=message).update(correct=False)
+                VernacularMessage.objects.filter(id=int(message)).update(correct=False)
                 messages.add_message(request, messages.SUCCESS, 'You have marked a translation as being wrong, If you have a better translation in that language submit it at the translate page')
                 return redirect('validate')
 
