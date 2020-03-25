@@ -1,0 +1,112 @@
+{% load static %}
+{% include 'shared/base.html' %}
+{% load bootstrap4 %}
+
+{% block body %}
+{% if messages %}
+<div class="container">
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        {% for message in messages %}
+        <p>{{ message }}</p>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+    <!-- Navbar section -->
+    <section>
+        <nav class="navbar navbar-expand-lg navbar-light bg-warning">
+            <a class="navbar-brand font-weight-bold" href="{% url 'index' %}">Covid-19 Awareness</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
+                aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+    
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                    <li class="nav-item mr-4">
+                        <a class="nav-link text-muted active" href="{% url 'index' %}#volunteer">Donate / Volunteer</a>
+                    </li>
+                    <li class="nav-item mr-4">
+                        <a class="nav-link text-muted" href="{% url 'index' %}#faqs">FAQs</a>
+                    </li>
+                    <li class="nav-item mr-4">
+                        <a class="nav-link text-muted" href="{% url 'index' %}#help">Support</a>
+                    </li>
+                    <li class="nav-item mr-4">
+                        <a class="nav-link text-muted" href="{% url 'index' %}#featured">Featured Supporters</a>
+                    </li>
+                    <li class="nav-item mr-4">
+                        <a class="nav-link text-muted" href="{% url 'translate' %}">Translate message</a>
+                    </li>
+                    <li class="nav-item mr-4">
+                        <a class="nav-link text-muted" href="{% url 'validate' %}">Validate translation</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </section>
+
+<section>
+
+    {% if vernacular_messages %}
+    <div class="container mt-5">
+        <h3>Translated messages</h3>
+        <p class="text-muted">If you think any of the messages below have been wrongly translated, Click on wrong button
+            on
+            the message you
+            believe to be wrong. You can also submit your version of the message.
+        </p>
+    </div>
+    {% else %}
+    <div class="container mt-5">
+        <h5>There are no translated message yet! Translate one at the<a class="font-weight-bold"
+                href="{% url 'translate' %}">translate page</a></h5>
+    </div>
+    {% endif %}
+
+    <div class="container">
+
+        {% for vernacular_message in vernacular_messages %}
+        <div class="card">
+            <h5 class="card-header">{{vernacular_message.language}}</h5>
+            <div class="card-body">
+                <p class="card-text">{{vernacular_message.message}}</p>
+                {% if vernacular_message.correct == False %} <p class="mt-5 text-muted">This translation has been marked as <b class="text-danger">wrong</b> if you
+                have a better translation submit it in the <a href="{% url 'translate' %}">translate page</a></p> {% endif %}
+                <form class="" method="POST">
+                    {% csrf_token %}
+                    <input type="text" name="correct" hidden>
+                    <input type="text" name="message" value="{{vernacular_message.id}}" hidden>
+                    <button class="btn mt-3 btn-danger" type="submit">Wrong translation</button>
+                </form>
+                <a href="{% url 'translate' %}" class="btn mt-3 btn-primary">Submit a better translation</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<footer class="card-footer mt-5 pt-4 bg-warning">
+    <p class="text-center">Powered by <a class="font-weight-bold"
+            href="https://twitter.com/Jaymohkish">lelerukjaymoh</a> and a community of
+        volunteers</p>
+
+    <div class="container">
+        <p>For any enquiries, Contact:</p>
+        <p class="font-weight-bold mb-0 text-muted">0717771518</p>
+        <a class="font-weight-bold text-primary" href="https://twitter.com/Jaymohkish">Twitter</a>
+    </div>
+</footer>
+<style>
+
+
+
+</style>
+<script>
+
+</script>
+{% endblock %}

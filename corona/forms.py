@@ -41,22 +41,21 @@ class DonationForm(forms.ModelForm):
 class MessageForm(forms.ModelForm):
     class Meta:
         model = Message
-        fields = ['language', 'main_message']
+        fields = ['language', 'message']
         widgets = {
             'language': forms.TextInput(attrs={'placeholder': 'Langauge'}),
-            'main_message': forms.TextInput(attrs={'placeholder': 'Main Message ...'}),
+            'message': forms.TextInput(attrs={'placeholder': 'Main Message ...'}),
         }
         labels = {
-            'language': '', 'main_message': ''
+            'language': '', 'message': ''
         }
 
 class VernacularMessageForm(forms.ModelForm):
     class Meta:
         model = VernacularMessage
-        fields = ['language', 'message']
+        fields = ['language', 'message',]
         widgets = {
-            'language': forms.TextInput(attrs={'placeholder': 'Langauge'}),
-            'message': forms.TextInput(attrs={'placeholder': 'Your translation ...'}),
+            'message': forms.Textarea(attrs={'placeholder': 'Your translation ...'}),
         }
         labels = {
             'language': '', 'message': ''

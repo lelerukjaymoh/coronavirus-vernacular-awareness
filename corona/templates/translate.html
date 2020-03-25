@@ -1,0 +1,99 @@
+{% load static %}
+{% include 'shared/base.html' %}
+{% load bootstrap4 %}
+
+{% block body %}
+{% if messages %}
+<div class="container">
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        {% for message in messages %}
+        <p>{{ message }}</p>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+    <!-- Navbar section -->
+    <section>
+        <nav class="navbar navbar-expand-lg navbar-light bg-warning">
+            <a class="navbar-brand font-weight-bold" href="{% url 'index' %}">Covid-19 Awareness</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
+                aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+    
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                    <li class="nav-item mr-4">
+                        <a class="nav-link text-muted active" href="{% url 'index' %}#volunteer">Donate / Volunteer</a>
+                    </li>
+                    <li class="nav-item mr-4">
+                        <a class="nav-link text-muted" href="{% url 'index' %}#faqs">FAQs</a>
+                    </li>
+                    <li class="nav-item mr-4">
+                        <a class="nav-link text-muted" href="{% url 'index' %}#help">Support</a>
+                    </li>
+                    <li class="nav-item mr-4">
+                        <a class="nav-link text-muted" href="{% url 'index' %}#featured">Featured Supporters</a>
+                    </li>
+                    <li class="nav-item mr-4">
+                        <a class="nav-link text-muted" href="{% url 'translate' %}">Translate message</a>
+                    </li>
+                    <li class="nav-item mr-4">
+                        <a class="nav-link text-muted" href="{% url 'validate' %}">Validate translation</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </section>
+
+<section>
+    <div class="container mt-5">
+        <h3 class="mb-3">This is the current message</h3>
+        <div class="card">
+            <div class="card-body">
+                {{main_message}}
+            </div>
+        </div>
+
+        <div class="mt-5 mb-3 text-muted">
+            <h4>Translate</h4> 
+        </div>
+        <div>
+            <form method="POST" id="notify_form">
+                {% csrf_token %}
+                {% bootstrap_form VernacularMessageForm %}
+                <input class="btn btn-outline-success font-weight-bold px-5" id="notify_button" type="submit"
+                    value="Submit Translation">
+            </form>
+        </div>
+    </div>
+</section>
+
+<footer class="card-footer mt-5 pt-4 bg-warning">
+    <p class="text-center">Powered by <a class="font-weight-bold"
+            href="https://twitter.com/Jaymohkish">lelerukjaymoh</a> and a community of
+        volunteers</p>
+
+    <div class="container">
+        <p>For any enquiries, Contact:</p>
+        <p class="font-weight-bold mb-0 text-muted">0717771518</p>
+        <a class="font-weight-bold text-primary" href="https://twitter.com/Jaymohkish">Twitter</a>
+    </div>
+</footer>
+<style>
+    
+
+    
+</style>
+<script>
+    $('.dropdown-item').on('click', function (event) {
+            var selected_language = $(event.target).text()
+            $('.language_selected').val(selected_language)
+            $('#language_input').val(selected_language)
+        });
+</script>
+{% endblock %}

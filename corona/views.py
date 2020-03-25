@@ -32,7 +32,7 @@ def index(request):
         if form.is_valid():
             form = form.save()
             form.save()
-            messages.add_message(request, messages.SUCCESS, 'Thanks for joining this comunity, lets fight against this outbreak together')
+            messages.add_message(request, messages.SUCCESS, 'Thanks for joining, let us fight this pandemic together')
             return redirect('index')
                 
     else:
@@ -124,3 +124,48 @@ def send_messages(request):
                         recipient.update(sent_messages=count)
                 
     return HttpResponse('<h4 class="text-success">Currently sending SMS</h>')
+
+def translate(request):
+    main_message = Message.objects.get(status=False)
+    print(main_message.id)
+    if request.method == 'POST':
+        print(request.POST)
+        # Translation form
+        form = VernacularMessageForm(request.POST)
+        if form.is_valid():
+            form.save(commit=False)
+            form.main_message = main_message.id
+            form.save()
+            return redirect('index')
+
+    else:
+        form = VernacularMessageForm
+
+    languages = Language.objects.all()
+
+    context = {
+        'VernacularMessageForm': VernacularMessageForm,
+        'languages': languages,
+        'main_message': main_message.message
+    }
+    return render(request, 'translate.html', context)
+
+def validate(request):
+    if request.method == "POST":
+        if 'correct' in request.POST:
+            message = request.POST.get('message')
+            correct = request.POST.get('correct')
+
+            message = VernacularMessage.objects.get(id=message)
+            if message.correct == False:
+                messages.add_message(request, messages.SUCCESS, 'This message had already been marked as wrong If you have a better translation in that language submit it at the translate page')
+                return redirect('validate')
+
+            else:
+                VernacularMessage.objects.filter(id=message).update(correct=False)
+                messages.add_message(request, messages.SUCCESS, 'You have marked a translation as being wrong, If you have a better translation in that language submit it at the translate page')
+                return redirect('validate')
+
+    vernacular_messages = VernacularMessage.objects.all()
+    context = {'vernacular_messages': vernacular_messages}
+    return render(request, 'validate.html', context)
