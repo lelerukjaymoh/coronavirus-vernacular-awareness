@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import RecipientForm, VolunteerForm, DonationForm, MessageForm, VernacularMessageForm
 from .models import Language, Volunteer, Donation, Recipient, Message, VernacularMessage, SMSDonation
 
 from .sms import SMS
+from datetime import datetime
 
 def index(request):
     if request.method == "POST":
@@ -30,10 +32,18 @@ def index(request):
         # volunteer form
         form = VolunteerForm(request.POST)
         if form.is_valid():
-            form = form.save()
-            form.save()
-            messages.add_message(request, messages.SUCCESS, 'Thanks for joining, let us fight this pandemic together')
-            return redirect('index')
+            phone = '+254'+request.POST['phone'][-9:]
+            if Volunteer.objects.filter(phone = phone).exists():
+                messages.add_message(request, messages.SUCCESS, 'You had already volunteered. If you think this is an error please contact 0717771518 to rectify that')
+                return redirect('index')
+
+            else:
+                form = form.save(commit=False)
+                print(phone)
+                form.phone = phone
+                form.save()
+                messages.add_message(request, messages.SUCCESS, 'Thanks for joining, let us fight this pandemic together')
+                return redirect('index')
                 
     else:
         form = RecipientForm
@@ -119,24 +129,44 @@ def send_messages(request):
                     VernacularMessage.objects.filter(message=message).update(sent=True)
                     recipient = Recipient.objects.filter(phone_number=each.phone_number)
                     for each in recipient:
+                        each.date_sent = timezone.now()
+                        each.save()
                         count = each.sent_messages
                         count += 1
                         recipient.update(sent_messages=count)
                 
     return HttpResponse('<h4 class="text-success">Currently sending SMS</h>')
 
+def notify_volunteers(request):
+    message = Message.objects.get(status=True)
+    volunteers = Volunteer.objects.all()
+    print(volunteers)
+    for volunteer in volunteers:        
+        phone = []
+        phone.append(volunteer.phone)
+        print(phone, message)
+        sms = SMS()
+        response = sms.send(phone, message)
+        response_status = response['SMSMessageData']['Recipients'][0]['status']
+        if response_status == 'Success':
+            volunteer.date_sent = timezone.now()
+            volunteer.save()
+
+
+    return HttpResponse('<h4 class="text-success">Notifying volunteers</h>')
+
 def translate(request):
-    main_message = Message.objects.get(status=False)
+    main_message = Message.objects.get(status=True)
     print(main_message.id)
     if request.method == 'POST':
         print(request.POST)
         # Translation form
         form = VernacularMessageForm(request.POST)
         if form.is_valid():
-            form.save(commit=False)
-            form.main_message = main_message.id
+            form = form.save(commit=False)
+            form.main_message = main_message
             form.save()
-            return redirect('index')
+            return redirect('validate')
 
     else:
         form = VernacularMessageForm
