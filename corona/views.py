@@ -133,8 +133,8 @@ def translate(request):
         # Translation form
         form = VernacularMessageForm(request.POST)
         if form.is_valid():
-            form.save(commit=False)
-            form.main_message = main_message.id
+            form = form.save(commit=False)
+            form.main_message = main_message
             form.save()
             return redirect('index')
 
