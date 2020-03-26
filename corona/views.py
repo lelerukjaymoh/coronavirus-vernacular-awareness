@@ -4,9 +4,10 @@ from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import RecipientForm, VolunteerForm, DonationForm, MessageForm, VernacularMessageForm
-from .models import Language, Volunteer, Donation, Recipient, Message, VernacularMessage, SMSDonation
+from .models import Language, Volunteer, Donation, Recipient, Message, VernacularMessage, SMSDonation, SMSBalance
 
 from .sms import SMS
+from .account_balance import APPLICATION_DATA
 from datetime import datetime
 
 def index(request):
@@ -89,7 +90,20 @@ def jay(request):
         form = MessageForm
         form = VernacularMessageForm
     
-        
+    account = APPLICATION_DATA()
+    acc_balance = account.fetchdata()
+
+    balance = SMSBalance(
+        balance = acc_balance,
+        date = timezone.now()
+    )
+
+    balance.save()
+    
+    app_acc_balance = SMSBalance.objects.latest('date')
+    sms_balance = int(int(float(app_acc_balance.balance.split('KES ')[1]))/0.8)
+    print(sms_balance)
+
     volunteers = Volunteer.objects.all()
     languages = Language.objects.all()
     donations = SMSDonation.objects.all()
@@ -99,6 +113,8 @@ def jay(request):
     vernacular_messages = VernacularMessage.objects.all()
 
     context = {
+        'sms_balance': sms_balance,
+        'app_acc_balance': app_acc_balance,
         'DonationForm': DonationForm,
         'MessageForm': MessageForm,
         'VernacularMessageForm': VernacularMessageForm,

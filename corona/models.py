@@ -57,3 +57,10 @@ class VernacularMessage(models.Model):
 
     def __str__(self):
         return str(self.language)
+
+class SMSBalance(models.Model):
+    date = models.DateTimeField()
+    balance = models.CharField(max_length=100, default=0)
+
+    def __str__(self):
+        return self.balance
