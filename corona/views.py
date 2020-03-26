@@ -144,9 +144,9 @@ def notify_volunteers(request):
     for volunteer in volunteers:        
         phone = []
         phone.append(volunteer.phone)
-        print(phone, message)
+        print(phone, message.message)
         sms = SMS()
-        response = sms.send(phone, message)
+        response = sms.send(phone, message.message)
         response_status = response['SMSMessageData']['Recipients'][0]['status']
         if response_status == 'Success':
             volunteer.date_sent = timezone.now()
