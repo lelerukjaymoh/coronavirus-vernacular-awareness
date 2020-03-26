@@ -46,7 +46,7 @@ class Message(models.Model):
     status = models.BooleanField(default=False)
 
     def __str__(self):
-        return str(self.created)
+        return self.message
 
 class VernacularMessage(models.Model):
     language = models.ForeignKey(Language, on_delete=models.PROTECT, related_name="vernacularlanguages")
